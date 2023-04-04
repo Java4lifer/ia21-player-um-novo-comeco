@@ -12,6 +12,14 @@
         }
         div.ia21-play {
             border: 1px solid black;
+            /* display: inline-block; */
+            width: 750px;
+            display: flex;
+            flex-direction: column;
+        }
+        div.ia21-play video {
+            width: 100%;
+
         }
         div.ia21-play div.controllers {
             display: flex;
@@ -51,9 +59,11 @@
     <body>
         
         <div class="ia21-play">
-            <video></video>
+            <video>
+                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+                <!-- <source src="https://www.w3schools.com/html/movie.ogg" type="video/ogg"> -->
+            </video>
             <div class="controllers">
-                <!-- ⏸ -->
                 <button class="play-pause">▶</button>
                 <div class="dragbar timeline">
                     <div class="draggable"></div>
@@ -67,5 +77,17 @@
             </div>
         </div>
 
+        <script>
+            const containers = document.querySelectorAll("div.ia21-play")
+            // for(let i = 0; i <= containers; i++) {
+            //     console.log(containers[1])
+            // } <-- performace
+
+            containers.forEach(el => {
+                const playPause = el.querySelector("button.play-pause")
+                const video = el.querySelector("video")
+                playPause.onclick = () => video.play()
+            }) // <-- funcional
+        </script>
     </body>
 </html>
