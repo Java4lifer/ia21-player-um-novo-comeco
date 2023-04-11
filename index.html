@@ -45,6 +45,7 @@
             position: relative;
         }
         div.ia21-play div.controllers div.dragbar div.draggable {
+            --percent: 0;
             background-color: black;
             width: 0.5rem;
             height: 0.5rem;
@@ -52,6 +53,7 @@
             cursor: pointer;
             position: absolute;
             top: calc(50% - 0.25rem);
+            left: calc(var(--percent) - 0.25rem)
         }
 
     </style>
@@ -86,7 +88,18 @@
             containers.forEach(el => {
                 const playPause = el.querySelector("button.play-pause")
                 const video = el.querySelector("video")
-                playPause.onclick = () => video.play()
+                const timeline = el.querySelector(".dragbar.timeline")
+                const timelinedrag = el.querySelector(".draggable")
+                const timer = el.querySelector(".timer")
+                //playPause.onclick = () => video.play()
+                playPause.addEventListener("click", () => video.play())
+
+                video.addEventListener("timeupdate", () => {
+                    const percent = (video.currentTime / video.duration) * 100
+                    timelinedrag.style.setProperty("--percent", `${percent}%`)
+                    timer.innerText = math.floor(`${video.currentTime}+:+${video.duration}`)
+                    //fazer timer
+                })
             }) // <-- funcional
         </script>
     </body>
