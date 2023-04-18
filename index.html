@@ -55,6 +55,11 @@
             top: calc(50% - 0.25rem);
             left: calc(var(--percent) - 0.25rem)
         }
+        /* div.ia21-play div.controllers div.timer {
+            width: 0.5rem;
+            height: 0.5rem;
+            top: calc(50% - 0.25rem);
+        } */
 
     </style>
 </head>
@@ -93,11 +98,22 @@
                 const timelinedrag = el.querySelector(".draggable")
                 const timer = el.querySelector(".timer")
                 //playPause.onclick = () => video.play()
-                playPause.addEventListener("click", () => video.play())
+                let ppl = 0
+                playPause.addEventListener("click", () => {
+                    if(ppl == 0) {
+                        video.play()
+                        ppl = 1
+                        playPause.innerHTML = "▐▐"
+                        return
+                    }
+                    video.pause()
+                    ppl = 0
+                    playPause.innerHTML = "▶"
+                })
                 
                 let timermin = 0
                 let timerhor = 0
-                let timersecs
+                let timersecs = 0
                 let timermins = 0
                 let timerhors = 0
                 video.currentTime = 55
@@ -127,6 +143,17 @@
                     
                     if(timerhor > 0) timer.innerHTML = `${timerhors}:${timermins}:${timersecs}`
                     else timer.innerHTML = `${timermins}:${timersecs}`
+                })
+                const dragbars = el.querySelectorAll(".dragbar")
+
+                dragbars.forEach(dragbar => {
+                    const dragabble = dragbar.querySelector(".draggable")
+                    dragbar.addEventListener("click", ev => {
+                        const width = Math.floor(dragabble.getBoundingClientRect().width)
+                        const percent = (ev.offsetX / width) * 100
+                        console.log(ev.offsetX)
+                        dragabble.style.setProperty('--percent', `${percent}`)
+                    })
                 })
             }) // <-- funcional
         </script>
