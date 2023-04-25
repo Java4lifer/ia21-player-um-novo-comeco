@@ -25,6 +25,7 @@
             display: flex;
             border-top: 1px solid black;
             column-gap: 10px;
+            padding-right: 10px;
         }
         div.ia21-play div.controllers button.play-pause{
             background-color: transparent;
@@ -44,13 +45,15 @@
             flex-grow: 1;
             position: relative;
         }
+        div.ia21-play div.controllers div.dragbar.timeline {
+            width: 40%;
+        }
         div.ia21-play div.controllers div.dragbar div.draggable {
             --percent: 0;
             background-color: black;
             width: 0.5rem;
             height: 0.5rem;
             border-radius: 50%;
-            cursor: pointer;
             position: absolute;
             top: calc(50% - 0.25rem);
             left: calc(var(--percent) - 0.25rem);
@@ -89,6 +92,17 @@
         </div>
 
         <script>
+            const playlist = document.querySelector("div.playlist")
+
+            void async function() {
+                const req = await fetch("list.json")
+                const json = await req.json()
+                
+                json.forEach(film => {
+                    playlist.innerHTML += `<div>${film.title}</div>`
+                })
+            }();
+
             const containers = document.querySelectorAll("div.ia21-play")
             // for(let i = 0; i <= containers; i++) {
             //     console.log(containers[1])
