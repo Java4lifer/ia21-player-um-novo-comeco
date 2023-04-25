@@ -1,1 +1,2 @@
 11/04 - problem: fazer um timer funcional de minuto
+25/05 - problem: fazer o baga bunitu

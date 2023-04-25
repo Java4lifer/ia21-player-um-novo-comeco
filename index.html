@@ -53,7 +53,8 @@
             cursor: pointer;
             position: absolute;
             top: calc(50% - 0.25rem);
-            left: calc(var(--percent) - 0.25rem)
+            left: calc(var(--percent) - 0.25rem);
+            pointer-events: none;
         }
         /* div.ia21-play div.controllers div.timer {
             width: 0.5rem;
@@ -65,6 +66,8 @@
 </head>
     <body>
         
+
+
         <div class="ia21-play">
             <video>
                 <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
@@ -150,23 +153,43 @@
                     if(dragbar.classList.contains("volume")) {
                         dragabble.style.setProperty("--percent", `100%`)
                     }
-                    dragbar.addEventListener("click", ev => {
+                    dragbar.addEventListener("mousedown", ev => {
+                        dragbar.classList.add("dragging")
+                    })
+                    dragbar.addEventListener("mouseup", ev => {
+                        dragbar.classList.remove("dragging")
+                    })
+                    dragbar.addEventListener("mouseout", ev => {
+                        dragbar.classList.remove("dragging")
+                    })
+                    dragbar.addEventListener("mousemove", ev => {
+                        if(ev.target  != dragbar || !dragbar.classList.contains("dragging")) return
+                        
                         const width = Math.floor(dragbar.getBoundingClientRect().width)
                         const index = (ev.offsetX / width)
                         const percent = index * 100
-                        console.log(ev.offsetX)
-                        dragabble.style.setProperty('--percent', `${percent}`)
+                        dragabble.style.setProperty('--percent', `${percent}%`)
+                    })
+
+                    dragbar.addEventListener("mouseup", ev => {
+                        if(ev.target  != dragbar) return
+
+                        const width = Math.floor(dragbar.getBoundingClientRect().width)
+                        const index = (ev.offsetX / width)
+                        const percent = index * 100
+
+                        dragabble.style.setProperty('--percent', `${percent}%`)
                         
                         if(dragbar.classList.contains("timeline")) {
                             video.currentTime = video.duration * index
                             return
                         }
                         if(dragbar.classList.contains("volume")) {
-                            video.volume = 1 * index
+                            video.volume = index
                             console.log("Rules of nature")
                             return
                         }
-                    })
+                    }, false)
                 })
             }) // <-- funcional
         </script>
