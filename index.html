@@ -4,77 +4,14 @@
     <meta charset='utf-8'>
     <title>Player</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        div.ia21-play {
-            border: 1px solid black;
-            /* display: inline-block; */
-            width: 750px;
-            display: flex;
-            flex-direction: column;
-        }
-        div.ia21-play video {
-            width: 100%;
-
-        }
-        div.ia21-play div.controllers {
-            display: flex;
-            border-top: 1px solid black;
-            column-gap: 10px;
-            padding-right: 10px;
-        }
-        div.ia21-play div.controllers button.play-pause{
-            background-color: transparent;
-            border: 0 none;
-            border-right: 1px solid black;
-            cursor: pointer;
-        }
-        div.ia21-play div.controllers div.dragbar:before {
-            content: " ";
-            position: absolute;
-            border-top: 1px solid black;
-            width: 100%;
-            top: calc(50% - .5px );
-            /*Para deixar no meio é 50% menos metade da largura da div: 1px > 0.5px*/
-        }
-        div.ia21-play div.controllers div.dragbar {
-            flex-grow: 1;
-            position: relative;
-        }
-        div.ia21-play div.controllers div.dragbar.timeline {
-            width: 40%;
-        }
-        div.ia21-play div.controllers div.dragbar div.draggable {
-            --percent: 0;
-            background-color: black;
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 50%;
-            position: absolute;
-            top: calc(50% - 0.25rem);
-            left: calc(var(--percent) - 0.25rem);
-            pointer-events: none;
-        }
-        /* div.ia21-play div.controllers div.timer {
-            width: 0.5rem;
-            height: 0.5rem;
-            top: calc(50% - 0.25rem);
-        } */
-
-    </style>
+    <link rel='stylesheet' href='player.css'>
+    <script src='player.js'></script>
 </head>
     <body>
-        
-
-
-        <div class="ia21-play">
+        <div class="ia21-play" data-playlist="list1.json">
             <video>
-                <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                <!-- <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"> -->
+                <!-- <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"> -->
+                <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
                 <!-- <source src="https://www.w3schools.com/html/movie.ogg" type="video/ogg"> -->
             </video>
             <div class="controllers">
@@ -89,123 +26,9 @@
                     <div class="draggable"></div>
                 </div>
             </div>
+            <div class="playlist">
+                
+            </div>
         </div>
-
-        <script>
-            const playlist = document.querySelector("div.playlist")
-
-            void async function() {
-                const req = await fetch("list.json")
-                const json = await req.json()
-                
-                json.forEach(film => {
-                    playlist.innerHTML += `<div>${film.title}</div>`
-                })
-            }();
-
-            const containers = document.querySelectorAll("div.ia21-play")
-            // for(let i = 0; i <= containers; i++) {
-            //     console.log(containers[1])
-            // } <-- performace
-
-            containers.forEach(el => {
-                const playPause = el.querySelector("button.play-pause")
-                const video = el.querySelector("video")
-                const timeline = el.querySelector(".dragbar.timeline")
-                const timelinedrag = el.querySelector(".draggable")
-                const timer = el.querySelector(".timer")
-                //playPause.onclick = () => video.play()
-                let ppl = 0
-                playPause.addEventListener("click", () => {
-                    if(ppl == 0) {
-                        video.play()
-                        ppl = 1
-                        playPause.innerHTML = "▐▐"
-                        return
-                    }
-                    video.pause()
-                    ppl = 0
-                    playPause.innerHTML = "▶"
-                })
-                
-                let timermin = 0
-                let timerhor = 0
-                let timersecs = 0
-                let timermins = 0
-                let timerhors = 0
-                
-                video.addEventListener("timeupdate", () => {
-                    const percent = (video.currentTime / video.duration) * 100
-                    timelinedrag.style.setProperty("--percent", `${percent}%`)
-                    let timersec = Math.floor(video.currentTime)
-                    
-                    if (timermin > 0) timersec = timersec - (60*timermin)
-                    if(timersec == 60) {
-                        timersec = timersec - 60
-                        timermin++
-                    }
-                    if (timerhor > 0) timermin = timermin - (60*timerhor)
-                    if(timermin == 60) {
-                        timermin = timermin - 60
-                        timerhor++
-                    }
-
-                    if(timersec < 10) timersecs = `0${Math.floor(timersec)}`
-                    else timersecs = Math.floor(timersec)
-                    if(timermin < 10) timermins = `0${timermin}`
-                    else timersecs = timersec
-                    if(timerhor < 10) timerhors = `0${timerhor}`
-                    else timersecs = timersec
-                    
-                    if(timerhor > 0) timer.innerHTML = `${timerhors}:${timermins}:${timersecs}`
-                    else timer.innerHTML = `${timermins}:${timersecs}`
-                })
-                const dragbars = el.querySelectorAll(".dragbar")
-
-                dragbars.forEach(dragbar => {
-                    const dragabble = dragbar.querySelector(".draggable")
-                    if(dragbar.classList.contains("volume")) {
-                        dragabble.style.setProperty("--percent", `100%`)
-                    }
-                    dragbar.addEventListener("mousedown", ev => {
-                        dragbar.classList.add("dragging")
-                    })
-                    dragbar.addEventListener("mouseup", ev => {
-                        dragbar.classList.remove("dragging")
-                    })
-                    dragbar.addEventListener("mouseout", ev => {
-                        dragbar.classList.remove("dragging")
-                    })
-                    dragbar.addEventListener("mousemove", ev => {
-                        if(ev.target  != dragbar || !dragbar.classList.contains("dragging")) return
-                        
-                        const width = Math.floor(dragbar.getBoundingClientRect().width)
-                        const index = (ev.offsetX / width)
-                        const percent = index * 100
-                        dragabble.style.setProperty('--percent', `${percent}%`)
-                    })
-
-                    dragbar.addEventListener("mouseup", ev => {
-                        if(ev.target  != dragbar) return
-
-                        const width = Math.floor(dragbar.getBoundingClientRect().width)
-                        const index = (ev.offsetX / width)
-                        const percent = index * 100
-
-                        dragabble.style.setProperty('--percent', `${percent}%`)
-                        
-                        if(dragbar.classList.contains("timeline")) {
-                            video.currentTime = video.duration * index
-                            return
-                        }
-                        if(dragbar.classList.contains("volume")) {
-                            video.volume = index
-                            console.log("Rules of nature")
-                            return
-                        }
-                    }, false)
-                })
-            }) // <-- funcional
-        </script>
     </body>
 </html>

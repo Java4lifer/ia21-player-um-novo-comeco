@@ -1,2 +1,4 @@
 11/04 - problem: fazer um timer funcional de minuto
 25/05 - problem: fazer o baga bunitu
+02/05 - problem: terminar o baga
+fix audio bar. make audio wok. fix timer. add playlist.
