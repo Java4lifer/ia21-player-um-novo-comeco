@@ -13,21 +13,19 @@ const containers = document.querySelectorAll("div.ia21-play")
                 const descri = el.querySelector(".desc")
                 const ler = el.querySelector("button.mler")
                 const playlist = document.querySelector(".playlist")
-                // //--------------------------------------------------------------------
-                const req = await fetch("el.dataset.playlist")
-                const json = await req.json()
-
-                let html = ""
-                json.forEach(film => {
-                    html += `<div>${film.title}</div>`
-                    playlist.innerHTML = html
-                    // <div class = "thumb">
-                    //     <img src="${film.thumb}">
-                    // </div>
-                })
                 //--------------------------------------------------------------------
-                //playPause.onclick = () => video.play()
+                // const req = await fetch("el.dataset.playlist")
+                // const json = await req.json()
+
+                // let html = ""
+                // json.forEach(film => {
+                //     html += `<div>${film.title}</div>`
+                //     playlist.innerHTML = html
+                // })
+                //--------------------------------------------------------------------
                 
+                
+                //playPause.onclick = () => video.play()
                 playPause.addEventListener("click", () => {
                     if(video.paused) {
                         video.play()
@@ -58,11 +56,13 @@ const containers = document.querySelectorAll("div.ia21-play")
                     if(letty == false) {
                         descri.style.setProperty("white-space","normal")
                         letty = true
+                        ler.innerHTML = "Ler menos"
                         return
                     }
 
                     descri.style.setProperty("white-space","nowrap")
                     letty = false
+                    ler.innerHTML = "Ler mais"
                 })
                 dragbars.forEach(dragbar => {
                     const dragabble = dragbar.querySelector(".draggable")

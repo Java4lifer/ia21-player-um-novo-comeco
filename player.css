@@ -1,6 +1,13 @@
 * {
     box-sizing: border-box;
 }
+@font-face {
+    font-family: "Sans";
+    src: url(img/COMIC.TTF) format("truetype");
+}
+div.ia21-play { 
+    font-family: "Sans", Verdana, Tahoma;
+}
 body {
     background-color: rgba(15, 15, 15, 0.938);
 }
@@ -117,9 +124,4 @@ div.ia21-play div.playlist {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-div.ia21-play div.playlist div.thumb{
-    width: 2rem;
-    height: 2rem;
-
 }
